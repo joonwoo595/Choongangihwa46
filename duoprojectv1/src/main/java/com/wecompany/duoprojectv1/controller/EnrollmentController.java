@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     @PostMapping("/enroll")
-    public ResponseEntity<?> enroll(@RequestBody EnrollRequestDto dto) {
+    public ResponseEntity<?> enroll(@Valid @RequestBody EnrollRequestDto dto) {
         try {
             enrollmentService.enroll(dto);
             return ResponseEntity.ok("수강 신청 성공");
@@ -29,11 +30,12 @@ public class EnrollmentController {
         }
     }
 
+
     @GetMapping("/enrollments")
-public ResponseEntity<List<EnrollResponseDto>> getEnrollments(@RequestParam int studentId) {
-    List<EnrollResponseDto> enrollments = enrollmentService.getEnrollments(studentId);
-    return ResponseEntity.ok(enrollments);
-}
+    public ResponseEntity<List<EnrollResponseDto>> getEnrollments(@RequestParam int studentId) {
+        List<EnrollResponseDto> enrollments = enrollmentService.getEnrollments(studentId);
+        return ResponseEntity.ok(enrollments);
+    }
 
 
 }
