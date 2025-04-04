@@ -68,9 +68,9 @@ public class EnrollmentService {
         int deleted = enrollmentMapper.deleteEnrollment(enrollmentId);
         if (deleted == 0) {
             /**
- * 수강 신청과 관련된 예외 처리는 모두 ResponseStatusException을 사용하여 통일
- */
-throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 학생은 존재하지 않습니다.");
+             * 수강 신청과 관련된 예외 처리는 모두 ResponseStatusException을 사용하여 통일
+             */
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 학생은 존재하지 않습니다.");
 
         }
     }
