@@ -42,5 +42,13 @@ public class EnrollmentService {
         return enrollmentMapper.findEnrollmentsByStudentId(studentId);
     }
 
+    public void cancelEnrollment(int enrollmentId) {
+    int deleted = enrollmentMapper.deleteEnrollment(enrollmentId);
+    if (deleted == 0) {
+        throw new IllegalArgumentException("존재하지 않는 수강 정보입니다.");
+    }
+}
+
+
 }
 

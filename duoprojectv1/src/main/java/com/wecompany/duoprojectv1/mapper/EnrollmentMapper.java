@@ -1,6 +1,7 @@
 package com.wecompany.duoprojectv1.mapper;
 
 import com.wecompany.duoprojectv1.dto.EnrollResponseDto;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -29,6 +30,10 @@ public interface EnrollmentMapper {
     WHERE e.st_num = #{studentId}
 """)
     List<EnrollResponseDto> findEnrollmentsByStudentId(@Param("studentId") int studentId);
+
+    @Delete("DELETE FROM enrollment WHERE enr_id = #{enrollmentId}")
+int deleteEnrollment(@Param("enrollmentId") int enrollmentId);
+
 
 }
 

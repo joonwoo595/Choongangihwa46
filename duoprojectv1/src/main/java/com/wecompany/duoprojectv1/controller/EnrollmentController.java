@@ -37,6 +37,18 @@ public class EnrollmentController {
         return ResponseEntity.ok(enrollments);
     }
 
+    @DeleteMapping("/enrollments/{enrollmentId}")
+public ResponseEntity<?> cancelEnrollment(@PathVariable int enrollmentId) {
+    try {
+        enrollmentService.cancelEnrollment(enrollmentId);
+        return ResponseEntity.ok("수강 신청이 취소되었습니다.");
+    } catch (IllegalArgumentException e) {
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), 400, e.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+}
+
+
 
 }
 
