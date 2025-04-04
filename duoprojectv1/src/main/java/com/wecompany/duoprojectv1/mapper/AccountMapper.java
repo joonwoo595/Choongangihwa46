@@ -1,4 +1,4 @@
-package com.wecompany.duoprojectv1.repository;
+package com.wecompany.duoprojectv1.mapper;
 
 import com.wecompany.duoprojectv1.domain.Account;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 @Mapper
-public interface AccountRepository {
+public interface AccountMapper {
     @Select("""
     SELECT
         acc_id AS accId,

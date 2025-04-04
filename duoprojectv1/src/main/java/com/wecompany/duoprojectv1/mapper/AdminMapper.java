@@ -1,4 +1,4 @@
-package com.wecompany.duoprojectv1.repository;
+package com.wecompany.duoprojectv1.mapper;
 
 import com.wecompany.duoprojectv1.domain.Admin;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 @Mapper
-public interface AdminRepository {
+public interface AdminMapper {
     @Select("SELECT * FROM admin WHERE acc_id = #{accId}")
     Optional<Admin> findByAccId(@Param("accId") Integer accId);
 }

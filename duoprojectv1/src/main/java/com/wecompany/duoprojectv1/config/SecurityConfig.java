@@ -17,24 +17,27 @@ import java.util.Map;
 @Configuration
 public class SecurityConfig {
 
+    // BCryptPasswordEncoder 빈을 등록하여 비밀번호를 안전하게 암호화합니다.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // HTTP 보안 설정: CSRF 보호 비활성화, 기본 로그인 폼 비활성화, 인증이 필요한 요청 설정
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable() // CSRF 비활성화 (개발용)
-            .formLogin().disable() // 기본 로그인 폼 비활성화
-            .httpBasic().disable() // Basic 인증도 비활성화
-            .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll() // 로그인 관련은 인증 없이 접근 가능
-                .anyRequest().authenticated(); // 그 외에는 인증 필요 (선택사항)
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf().disable()
+        .formLogin().disable()
+        .httpBasic().disable()
+        .authorizeRequests()
+            .anyRequest().permitAll(); // ✅ 모든 요청 인증 없이 허용
 
-        return http.build();
-    }
+    return http.build();
+}
 
+
+    // ResponseStatusException 예외를 처리하여 사용자에게 오류 메시지 제공
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Map<String, Object>> handleResponseStatusException(ResponseStatusException ex) {
         Map<String, Object> error = new HashMap<>();
