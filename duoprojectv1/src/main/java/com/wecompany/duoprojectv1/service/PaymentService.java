@@ -1,9 +1,12 @@
 package com.wecompany.duoprojectv1.service;
 
 import com.wecompany.duoprojectv1.domain.Payment;
+import com.wecompany.duoprojectv1.dto.PaymentResponseDto;
 import com.wecompany.duoprojectv1.mapper.PaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +24,10 @@ public class PaymentService {
         paymentMapper.insertPayment(payment);
 
         return payment;
+    }
+
+    // 💳 학생별 결제 내역 조회
+    public List<PaymentResponseDto> getPaymentsByStudentId(int studentId) {
+        return paymentMapper.findPaymentsByStudentId(studentId);
     }
 }

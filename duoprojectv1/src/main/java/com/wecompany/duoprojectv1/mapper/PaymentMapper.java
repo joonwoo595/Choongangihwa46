@@ -1,9 +1,11 @@
 package com.wecompany.duoprojectv1.mapper;
 
 import com.wecompany.duoprojectv1.domain.Payment;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
+import com.wecompany.duoprojectv1.dto.PaymentResponseDto;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
 
 @Mapper
 public interface PaymentMapper {
@@ -16,7 +18,17 @@ public interface PaymentMapper {
 @Options(useGeneratedKeys = true, keyProperty = "payId", keyColumn = "pay_id")
 void insertPayment(Payment payment);
 
-
-
+ // 💳 학생 ID로 결제 내역 조회
+    @Select("""
+        SELECT 
+            l.cos_name AS lectureName,
+            e.payment AS amount,
+            p.paid_at AS paidAt
+        FROM payment p
+        JOIN enrollment e ON p.pay_id = e.pay_id
+        JOIN lecture l ON e.cos_id = l.cos_id
+        WHERE e.st_num = #{studentId}
+    """)
+    List<PaymentResponseDto> findPaymentsByStudentId(@Param("studentId") int studentId);
 
 }
