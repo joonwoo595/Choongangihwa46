@@ -36,17 +36,16 @@ public interface EnrollmentMapper {
      *
      * @param studentId 학생 ID
      * @param lectureId 강의 ID
-     * @param payment 강의 가격
+     * @param payment   강의 가격
      */
-   @Insert("""
+    @Insert("""
     INSERT INTO enrollment (st_num, cos_id, payment, pay_id)
     VALUES (#{studentId}, #{lectureId}, #{payment}, #{payId})
 """)
-int insertEnrollment(@Param("studentId") int studentId,
-                     @Param("lectureId") int lectureId,
-                     @Param("payment") int payment,
-                     @Param("payId") int payId);
-
+    int insertEnrollment(@Param("studentId") int studentId,
+                         @Param("lectureId") int lectureId,
+                         @Param("payment") int payment,
+                         @Param("payId") int payId);
 
 
     /**
@@ -74,6 +73,14 @@ int insertEnrollment(@Param("studentId") int studentId,
     @Delete("DELETE FROM enrollment WHERE enr_id = #{enrollmentId}")
     int deleteEnrollment(@Param("enrollmentId") int enrollmentId);
 
+
+    // 현재 수강 인원 조회
+    @Select("SELECT COUNT(*) FROM enrollment WHERE cos_id = #{lectureId}")
+    int countEnrollmentsByLectureId(@Param("lectureId") int lectureId);
+
+    // 최대 수강 인원 조회}
+    @Select("SELECT max_capacity FROM lecture WHERE cos_id = #{lectureId}")
+    int getLectureMaxCapacity(@Param("lectureId") int lectureId);
 
 
 }

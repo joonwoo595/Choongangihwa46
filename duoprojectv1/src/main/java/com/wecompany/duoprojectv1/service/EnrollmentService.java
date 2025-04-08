@@ -45,6 +45,18 @@ public class EnrollmentService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 강의는 존재하지 않습니다.");
         }
 
+        // 💡 2-A. 현재 수강 인원
+        int currentCount = enrollmentMapper.countEnrollmentsByLectureId(dto.getLectureId());
+
+// 💡 2-B. 최대 수강 인원
+        int maxCapacity = enrollmentMapper.getLectureMaxCapacity(dto.getLectureId());
+
+// 💡 2-C. 정원 초과 여부 확인
+        if (currentCount >= maxCapacity) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 강의는 수강 정원이 마감되었습니다.");
+        }
+
+
         // 3. 가상 결제 생성
         Payment payment = paymentService.createVirtualPayment();
 
