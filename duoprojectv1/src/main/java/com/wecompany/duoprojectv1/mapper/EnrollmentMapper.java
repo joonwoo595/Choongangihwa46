@@ -1,10 +1,7 @@
 package com.wecompany.duoprojectv1.mapper;
 
 import com.wecompany.duoprojectv1.dto.EnrollResponseDto;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -41,8 +38,16 @@ public interface EnrollmentMapper {
      * @param lectureId 강의 ID
      * @param payment 강의 가격
      */
-    @Insert("INSERT INTO enrollment (st_num, cos_id, payment) VALUES (#{studentId}, #{lectureId}, #{payment})")
-    void insertEnrollment(@Param("studentId") int studentId, @Param("lectureId") int lectureId, @Param("payment") int payment);
+   @Insert("""
+    INSERT INTO enrollment (st_num, cos_id, payment, pay_id)
+    VALUES (#{studentId}, #{lectureId}, #{payment}, #{payId})
+""")
+int insertEnrollment(@Param("studentId") int studentId,
+                     @Param("lectureId") int lectureId,
+                     @Param("payment") int payment,
+                     @Param("payId") int payId);
+
+
 
     /**
      * 학생 ID로 해당 학생의 수강 내역을 조회
@@ -68,5 +73,7 @@ public interface EnrollmentMapper {
      */
     @Delete("DELETE FROM enrollment WHERE enr_id = #{enrollmentId}")
     int deleteEnrollment(@Param("enrollmentId") int enrollmentId);
+
+
 
 }

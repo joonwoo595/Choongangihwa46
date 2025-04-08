@@ -20,6 +20,7 @@ public class AuthController {
     // 로그인 API, 로그인 요청을 받아 AuthService를 통해 로그인 처리
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
+
         // 로그인 요청을 처리하고 결과를 반환
         LoginResponseDto response = authService.login(dto);
         return ResponseEntity.ok(response);

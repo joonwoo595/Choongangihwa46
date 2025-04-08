@@ -19,6 +19,6 @@ public interface AccountMapper {
     FROM account
     WHERE email = #{email}
 """)
-Optional<Account> findByEmail(@Param("email") String email);
+    Optional<Account> findByEmail(@Param("email") String email);
 
 }

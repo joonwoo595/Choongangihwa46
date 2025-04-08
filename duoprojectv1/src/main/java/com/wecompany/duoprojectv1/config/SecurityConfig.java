@@ -25,16 +25,16 @@ public class SecurityConfig {
 
     // HTTP 보안 설정: CSRF 보호 비활성화, 기본 로그인 폼 비활성화, 인증이 필요한 요청 설정
     @Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf().disable()
-        .formLogin().disable()
-        .httpBasic().disable()
-        .authorizeRequests()
-            .anyRequest().permitAll(); // ✅ 모든 요청 인증 없이 허용
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .authorizeRequests()
+                .anyRequest().permitAll(); // ✅ 모든 요청 인증 없이 허용
 
-    return http.build();
-}
+        return http.build();
+    }
 
 
     // ResponseStatusException 예외를 처리하여 사용자에게 오류 메시지 제공

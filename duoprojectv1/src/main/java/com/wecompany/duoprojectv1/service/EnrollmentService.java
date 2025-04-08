@@ -1,34 +1,34 @@
 package com.wecompany.duoprojectv1.service;
 
+import com.wecompany.duoprojectv1.domain.Payment;
 import com.wecompany.duoprojectv1.domain.Student;
 import com.wecompany.duoprojectv1.dto.EnrollRequestDto;
 import com.wecompany.duoprojectv1.dto.EnrollResponseDto;
 import com.wecompany.duoprojectv1.mapper.EnrollmentMapper;
+import com.wecompany.duoprojectv1.mapper.PaymentMapper;
 import com.wecompany.duoprojectv1.mapper.StudentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-/**
- * 수강 신청 관련 비즈니스 로직을 처리하는 서비스 클래스
- */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EnrollmentService {
 
     private final EnrollmentMapper enrollmentMapper;
     private final StudentMapper studentMapper;
+    private final PaymentMapper paymentMapper;
+    private final PaymentService paymentService;
 
     /**
      * 수강 신청 처리
-     *
-     * @param dto 수강 신청 요청 데이터 (studentId, lectureId)
      */
     public void registerEnrollment(EnrollRequestDto dto) {
-
         // 0. 학생 존재 여부 확인
         Student student = studentMapper.findById(dto.getStudentId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 학생은 존재하지 않습니다."));
@@ -45,33 +45,34 @@ public class EnrollmentService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 강의는 존재하지 않습니다.");
         }
 
-        // 3. 수강 등록
-        enrollmentMapper.insertEnrollment(dto.getStudentId(), dto.getLectureId(), price);
+        // 3. 가상 결제 생성
+        Payment payment = paymentService.createVirtualPayment();
+
+        if (payment.getPayId() == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "결제 ID 생성에 실패했습니다.");
+        }
+
+        // 4. 수강 등록
+        int rowsInserted = enrollmentMapper.insertEnrollment(
+                dto.getStudentId(),
+                dto.getLectureId(),
+                price,
+                payment.getPayId()
+        );
+
+        if (rowsInserted == 0) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "수강 신청 등록에 실패했습니다.");
+        }
     }
 
-    /**
-     * 학생 ID로 수강 내역 조회
-     *
-     * @param studentId 학생 ID
-     * @return 수강 내역 리스트
-     */
     public List<EnrollResponseDto> getEnrollments(int studentId) {
         return enrollmentMapper.findEnrollmentsByStudentId(studentId);
     }
 
-    /**
-     * 수강 신청 취소
-     *
-     * @param enrollmentId 수강 ID
-     */
     public void cancelEnrollment(int enrollmentId) {
         int deleted = enrollmentMapper.deleteEnrollment(enrollmentId);
         if (deleted == 0) {
-            /**
-             * 수강 신청과 관련된 예외 처리는 모두 ResponseStatusException을 사용하여 통일
-             */
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 학생은 존재하지 않습니다.");
-
         }
     }
 }

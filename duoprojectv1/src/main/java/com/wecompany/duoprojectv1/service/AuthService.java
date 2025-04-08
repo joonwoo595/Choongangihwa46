@@ -26,6 +26,7 @@ public class AuthService {
 
     // 로그인 처리 메소드
     public LoginResponseDto login(LoginRequestDto dto) {
+
         // 이메일로 계정 조회
         Account account = getAccountByEmail(dto.getEmail());
 

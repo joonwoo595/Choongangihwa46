@@ -1,5 +1,6 @@
 package com.wecompany.duoprojectv1.controller;
 
+import com.wecompany.duoprojectv1.dto.ApiResponseDto;
 import com.wecompany.duoprojectv1.dto.EnrollRequestDto;
 import com.wecompany.duoprojectv1.dto.EnrollResponseDto;
 import com.wecompany.duoprojectv1.dto.ErrorResponse;
@@ -32,15 +33,13 @@ public class EnrollmentController {
      * @return 수강 신청 성공 메시지 또는 예외 응답
      */
     @PostMapping("/enroll")
-    public ResponseEntity<?> registerEnrollment(@Valid @RequestBody EnrollRequestDto enrollRequestDto) {
-        try {
-            enrollmentService.registerEnrollment(enrollRequestDto);
-            return ResponseEntity.ok("수강 신청이 완료되었습니다.");
-        } catch (IllegalArgumentException e) {
-            ErrorResponse error = new ErrorResponse(LocalDateTime.now(), 400, e.getMessage());
-            return ResponseEntity.badRequest().body(error);
-        }
+    public ResponseEntity<ApiResponseDto> registerEnrollment(@Valid @RequestBody EnrollRequestDto enrollRequestDto) {
+        enrollmentService.registerEnrollment(enrollRequestDto);
+        return ResponseEntity.ok(new ApiResponseDto("수강 신청이 완료되었습니다."));
     }
+
+
+
 
     /**
      * 특정 학생의 수강 내역 조회
@@ -61,13 +60,9 @@ public class EnrollmentController {
      * @return 수강 신청 취소 완료 메시지 또는 예외 응답
      */
     @DeleteMapping("/enrollments/{enrollmentId}")
-    public ResponseEntity<?> cancelEnrollment(@PathVariable int enrollmentId) {
-        try {
-            enrollmentService.cancelEnrollment(enrollmentId);
-            return ResponseEntity.ok("수강 신청이 취소되었습니다.");
-        } catch (IllegalArgumentException e) {
-            ErrorResponse error = new ErrorResponse(LocalDateTime.now(), 400, e.getMessage());
-            return ResponseEntity.badRequest().body(error);
-        }
-    }
+public ResponseEntity<ApiResponseDto> cancelEnrollment(@PathVariable int enrollmentId) {
+    enrollmentService.cancelEnrollment(enrollmentId);
+    return ResponseEntity.ok(new ApiResponseDto("수강 신청이 취소되었습니다."));
+}
+
 }

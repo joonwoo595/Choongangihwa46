@@ -13,6 +13,6 @@ public interface StudentMapper {
     Optional<Student> findByAccId(@Param("accId") Integer accId);
 
     @Select("SELECT * FROM student WHERE st_num = #{studentId}")
-Optional<Student> findById(@Param("studentId") int studentId);
+    Optional<Student> findById(@Param("studentId") int studentId);
 
 }
