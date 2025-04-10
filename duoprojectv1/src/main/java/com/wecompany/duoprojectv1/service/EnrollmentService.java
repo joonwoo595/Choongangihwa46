@@ -49,7 +49,8 @@ public class EnrollmentService {
         int currentCount = enrollmentMapper.countEnrollmentsByLectureId(dto.getLectureId());
 
 // 💡 2-B. 최대 수강 인원
-        int maxCapacity = enrollmentMapper.getLectureMaxCapacity(dto.getLectureId());
+        int maxCapacity = enrollmentMapper.getLectureMaxCapacityWithLock(dto.getLectureId());
+
 
 // 💡 2-C. 정원 초과 여부 확인
         if (currentCount >= maxCapacity) {
@@ -84,7 +85,8 @@ public class EnrollmentService {
     public void cancelEnrollment(int enrollmentId) {
         int deleted = enrollmentMapper.deleteEnrollment(enrollmentId);
         if (deleted == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 학생은 존재하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 수강 신청 내역이 존재하지 않습니다.");
+
         }
     }
 }

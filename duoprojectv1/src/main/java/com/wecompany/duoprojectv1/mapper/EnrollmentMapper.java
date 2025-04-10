@@ -83,4 +83,12 @@ public interface EnrollmentMapper {
     int getLectureMaxCapacity(@Param("lectureId") int lectureId);
 
 
+    @Select("""
+    SELECT max_capacity 
+    FROM lecture 
+    WHERE cos_id = #{lectureId}
+    FOR UPDATE
+""")
+    int getLectureMaxCapacityWithLock(@Param("lectureId") int lectureId);
+
 }
