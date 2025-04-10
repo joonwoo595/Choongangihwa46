@@ -55,7 +55,8 @@ public interface EnrollmentMapper {
      * @return 학생의 수강 내역 리스트
      */
     @Select("""
-        SELECT l.cos_name AS lectureName,
+        SELECT e.enr_id AS enrollmentId, 
+               l.cos_name AS lectureName,
                e.payment AS payment,
                e.created_at AS enrolledAt
         FROM enrollment e
