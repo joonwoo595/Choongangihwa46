@@ -5,6 +5,7 @@
 
 <mapper namespace="com.wecompany.duoprojectv1.mapper.InstructorMapper">
 
+    <!-- 강의 목록 조회 (교수 계정 기반) -->
     <select id="findLecturesByInstructor" resultType="com.wecompany.duoprojectv1.dto.InstructorLectureDto">
         SELECT cos_id, cos_name, price, create_date
         FROM lecture
@@ -13,6 +14,7 @@
         )
     </select>
 
+    <!-- 교수의 수강생 목록 조회 -->
     <select id="findEnrolledStudentsByInstructor" resultType="com.wecompany.duoprojectv1.dto.EnrolledStudentDto">
         SELECT s.st_num, s.st_name, s.st_department, s.st_year, l.cos_name
         FROM enrollment e
@@ -22,5 +24,9 @@
             SELECT ins_id FROM instructor WHERE acc_id = #{accId}
         )
     </select>
+
+    <select id="findById" resultType="com.wecompany.duoprojectv1.domain.Instructor">
+    SELECT * FROM instructor WHERE ins_id = #{insId}
+</select>
 
 </mapper>

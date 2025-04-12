@@ -15,8 +15,12 @@ import java.util.Optional;
 public interface InstructorMapper {
     Optional<Instructor> findByAccId(@Param("accId") Integer accId);
 
+    @Select("SELECT * FROM instructor WHERE ins_id = #{insId}")
+    Optional<Instructor> findById(@Param("insId") Integer insId);
+
     List<InstructorLectureDto> findLecturesByInstructor(@Param("accId") int accId);
 
     List<EnrolledStudentDto> findEnrolledStudentsByInstructor(@Param("accId") int accId);
 }
+
 

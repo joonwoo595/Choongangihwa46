@@ -57,11 +57,24 @@ public class AuthService {
     // 사용자 유형에 맞는 정보 반환
     private UserInfoDto getUserInfoByType(Account account) {
     return switch (UserType.from(account.getUserType())) {
-        case ADMIN -> getAdminInfo(account);
-        case STUDENT -> getStudentInfo(account);
-        case INSTRUCTOR -> getInstructorInfo(account);
+        case ADMIN -> {
+            AdminDto adminDto = getAdminInfo(account);
+            adminDto.setType("ADMIN");
+            yield adminDto;
+        }
+        case STUDENT -> {
+            StudentDto studentDto = getStudentInfo(account);
+            studentDto.setType("STUDENT");
+            yield studentDto;
+        }
+        case INSTRUCTOR -> {
+            InstructorDto instructorDto = getInstructorInfo(account);
+            instructorDto.setType("INSTRUCTOR");
+            yield instructorDto;
+        }
     };
 }
+
 
     // ADMIN 유형에 맞는 정보 반환
     private AdminDto getAdminInfo(Account account) {

@@ -13,11 +13,27 @@
         SELECT * FROM lecture ORDER BY create_date DESC
     </select>
 
-    <select id="searchLectures" resultType="com.wecompany.duoprojectv1.domain.Lecture">
-        SELECT cos_id, cos_name, cos_ins, price, total_second, create_date, dep_id, max_capacity
-        FROM lecture
-        WHERE cos_name LIKE CONCAT('%', #{keyword}, '%')
-           OR cos_ins LIKE CONCAT('%', #{keyword}, '%')
-    </select>
+    <select id="searchLectures" resultMap="LectureWithInstructorResultMap">
+    SELECT
+        l.cos_id, l.cos_name, l.price, l.total_second, l.create_date,
+        l.dep_id, l.max_capacity, l.ins_id,
+        i.ins_name
+    FROM lecture l
+    LEFT JOIN instructor i ON l.ins_id = i.ins_id
+    WHERE l.cos_name LIKE CONCAT('%', #{keyword}, '%')
+       OR i.ins_name LIKE CONCAT('%', #{keyword}, '%')
+</select>
+
+<resultMap id="LectureWithInstructorResultMap" type="com.wecompany.duoprojectv1.domain.Lecture">
+    <id property="cosId" column="cos_id"/>
+    <result property="cosName" column="cos_name"/>
+    <result property="price" column="price"/>
+    <result property="totalSecond" column="total_second"/>
+    <result property="createDate" column="create_date"/>
+    <result property="depId" column="dep_id"/>
+    <result property="maxCapacity" column="max_capacity"/>
+    <result property="insId" column="ins_id"/>
+</resultMap>
+
 
 </mapper>
