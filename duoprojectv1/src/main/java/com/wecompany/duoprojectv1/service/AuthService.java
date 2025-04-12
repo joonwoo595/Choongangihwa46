@@ -1,9 +1,6 @@
 package com.wecompany.duoprojectv1.service;
 
-import com.wecompany.duoprojectv1.domain.Account;
-import com.wecompany.duoprojectv1.domain.Admin;
-import com.wecompany.duoprojectv1.domain.Instructor;
-import com.wecompany.duoprojectv1.domain.Student;
+import com.wecompany.duoprojectv1.domain.*;
 import com.wecompany.duoprojectv1.dto.*;
 import com.wecompany.duoprojectv1.mapper.AccountMapper;
 import com.wecompany.duoprojectv1.mapper.AdminMapper;
@@ -59,17 +56,12 @@ public class AuthService {
 
     // 사용자 유형에 맞는 정보 반환
     private UserInfoDto getUserInfoByType(Account account) {
-        switch (account.getUserType()) {
-            case "ADMIN":
-                return getAdminInfo(account);
-            case "STUDENT":
-                return getStudentInfo(account);
-            case "INSTRUCTOR":
-                return getInstructorInfo(account);
-            default:
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "지원하지 않는 사용자 유형입니다.");
-        }
-    }
+    return switch (UserType.from(account.getUserType())) {
+        case ADMIN -> getAdminInfo(account);
+        case STUDENT -> getStudentInfo(account);
+        case INSTRUCTOR -> getInstructorInfo(account);
+    };
+}
 
     // ADMIN 유형에 맞는 정보 반환
     private AdminDto getAdminInfo(Account account) {

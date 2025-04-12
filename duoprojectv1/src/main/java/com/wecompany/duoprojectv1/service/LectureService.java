@@ -41,4 +41,30 @@ public class LectureService {
     return dto;
 }
 
+// mapper 작성안해서 빨간 글씨됨
+public List<LectureResponseDto> searchLectures(String keyword) {
+    return lectureMapper.searchLectures(keyword).stream()
+        .map(this::toDto)
+        .toList();
+}
+
+public List<LectureResponseDto> sortLectures(String sortBy) {
+    List<Lecture> lectures;
+    switch (sortBy.toLowerCase()) {
+        case "price" -> lectures = lectureMapper.sortLecturesByPrice();
+        case "create_date" -> lectures = lectureMapper.sortLecturesByCreateDate();
+        default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "정렬 기준이 올바르지 않습니다.");
+    }
+    return lectures.stream().map(this::toDto).toList();
+}
+
+
+public List<LectureResponseDto> filterLectures(int depId) {
+    return lectureMapper.filterLectures(depId).stream()
+        .map(this::toDto)
+        .toList();
+}
+
+
+
 }

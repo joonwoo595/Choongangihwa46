@@ -16,14 +16,15 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping
-    public ResponseEntity<List<LectureResponseDto>> getAllLectures() {
-        return ResponseEntity.ok(lectureService.getAllLectures());
-    }
-
-    @GetMapping("/{cosId}")
-public ResponseEntity<LectureResponseDto> getLectureById(@PathVariable int cosId) {
-    return ResponseEntity.ok(lectureService.getLectureById(cosId));
+    @GetMapping("/search")
+public ResponseEntity<List<LectureResponseDto>> searchLectures(@RequestParam String keyword) {
+    return ResponseEntity.ok(lectureService.searchLectures(keyword));
 }
+
+@GetMapping("/sort")
+public ResponseEntity<List<LectureResponseDto>> sortLectures(@RequestParam String sortBy) {
+    return ResponseEntity.ok(lectureService.sortLectures(sortBy));
+}
+
 
 }

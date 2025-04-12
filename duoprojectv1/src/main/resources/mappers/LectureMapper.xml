@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wecompany.duoprojectv1.mapper.LectureMapper">
+
+    <select id="sortLecturesByPrice" resultType="com.wecompany.duoprojectv1.domain.Lecture">
+        SELECT * FROM lecture ORDER BY price
+    </select>
+
+    <select id="sortLecturesByCreateDate" resultType="com.wecompany.duoprojectv1.domain.Lecture">
+        SELECT * FROM lecture ORDER BY create_date DESC
+    </select>
+
+    <select id="searchLectures" resultType="com.wecompany.duoprojectv1.domain.Lecture">
+        SELECT cos_id, cos_name, cos_ins, price, total_second, create_date, dep_id, max_capacity
+        FROM lecture
+        WHERE cos_name LIKE CONCAT('%', #{keyword}, '%')
+           OR cos_ins LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+</mapper>
