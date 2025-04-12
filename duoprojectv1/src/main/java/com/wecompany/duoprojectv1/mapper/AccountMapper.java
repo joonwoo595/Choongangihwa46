@@ -1,12 +1,13 @@
 package com.wecompany.duoprojectv1.mapper;
 
 import com.wecompany.duoprojectv1.domain.Account;
+import com.wecompany.duoprojectv1.dto.AccountSimpleDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Param; // ⭕
 
 
-
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -22,5 +23,12 @@ public interface AccountMapper {
     WHERE email = #{email}
 """)
     Optional<Account> findByEmail(@Param("email") String email);
+
+
+    @Select("""
+    SELECT acc_id, email, user_type, created_at
+    FROM account
+""")
+    List<AccountSimpleDto> findAllAccounts();
 
 }
