@@ -1,11 +1,11 @@
 package com.wecompany.duoprojectv1.service;
 
-import com.wecompany.duoprojectv1.domain.*;
-import com.wecompany.duoprojectv1.dto.*;
+import com.wecompany.duoprojectv1.domain.Account;
+import com.wecompany.duoprojectv1.dto.LoginRequestDto;
+import com.wecompany.duoprojectv1.dto.LoginResponseDto;
+import com.wecompany.duoprojectv1.dto.UserInfoDto;
 import com.wecompany.duoprojectv1.mapper.AccountMapper;
-import com.wecompany.duoprojectv1.mapper.AdminMapper;
-import com.wecompany.duoprojectv1.mapper.InstructorMapper;
-import com.wecompany.duoprojectv1.mapper.StudentMapper;
+import com.wecompany.duoprojectv1.strategy.LoginStrategyFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,14 +16,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class AuthService {
     private final AccountMapper accountRepository;
-    private final AdminMapper adminRepository;
-    private final StudentMapper studentRepository;
-    private final InstructorMapper instructorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LoginStrategyFactory loginStrategyFactory;
 
     // 로그인 처리 메소드
     public LoginResponseDto login(LoginRequestDto dto) {
-
         // 이메일로 계정 조회
         Account account = getAccountByEmail(dto.getEmail());
 
@@ -31,14 +28,11 @@ public class AuthService {
         verifyPassword(dto.getPasswd(), account.getPasswd());
 
         // 로그인 응답 데이터 빌드
-        LoginResponseDto.LoginResponseDtoBuilder builder = LoginResponseDto.builder()
+        return LoginResponseDto.builder()
                 .email(account.getEmail())
-                .userType(account.getUserType());
-
-        // 사용자 유형에 맞는 추가 정보 설정
-        builder.userInfo(getUserInfoByType(account));
-
-        return builder.build();
+                .userType(account.getUserType())
+                .userInfo(loginStrategyFactory.getUserInfo(account))
+                .build();
     }
 
     // 이메일로 계정 조회
@@ -53,59 +47,4 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
     }
-
-    // 사용자 유형에 맞는 정보 반환
-    private UserInfoDto getUserInfoByType(Account account) {
-    return switch (UserType.from(account.getUserType())) {
-        case ADMIN -> {
-            AdminDto adminDto = getAdminInfo(account);
-            adminDto.setType("ADMIN");
-            yield adminDto;
-        }
-        case STUDENT -> {
-            StudentDto studentDto = getStudentInfo(account);
-            studentDto.setType("STUDENT");
-            yield studentDto;
-        }
-        case INSTRUCTOR -> {
-            InstructorDto instructorDto = getInstructorInfo(account);
-            instructorDto.setType("INSTRUCTOR");
-            yield instructorDto;
-        }
-    };
 }
-
-
-    // ADMIN 유형에 맞는 정보 반환
-    private AdminDto getAdminInfo(Account account) {
-        Admin admin = adminRepository.findByAccId(account.getAccId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "관리자 정보가 없습니다."));
-        AdminDto adminDto = new AdminDto();
-        adminDto.setName(admin.getAdminName());
-        adminDto.setPhone(admin.getAdminPhone());
-        return adminDto;
-    }
-
-    // STUDENT 유형에 맞는 정보 반환
-    private StudentDto getStudentInfo(Account account) {
-        Student student = studentRepository.findByAccId(account.getAccId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "학생 정보가 없습니다."));
-        StudentDto studentDto = new StudentDto();
-        studentDto.setName(student.getStName());
-        studentDto.setDepartment(student.getStDepartment());
-        studentDto.setYear(student.getStYear());
-        return studentDto;
-    }
-
-    // INSTRUCTOR 유형에 맞는 정보 반환
-    private InstructorDto getInstructorInfo(Account account) {
-        Instructor instructor = instructorRepository.findByAccId(account.getAccId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "교수 정보가 없습니다."));
-        InstructorDto instructorDto = new InstructorDto();
-        instructorDto.setName(instructor.getInsName());
-        instructorDto.setDepartmentId(instructor.getDepId());
-        instructorDto.setMajorId(instructor.getMajId());
-        return instructorDto;
-    }
-}
-

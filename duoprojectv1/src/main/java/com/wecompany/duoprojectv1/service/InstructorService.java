@@ -1,7 +1,10 @@
 package com.wecompany.duoprojectv1.service;
 
+import java.util.Optional;
+import com.wecompany.duoprojectv1.domain.Instructor;
 import com.wecompany.duoprojectv1.dto.EnrolledStudentDto;
 import com.wecompany.duoprojectv1.dto.InstructorLectureDto;
+import com.wecompany.duoprojectv1.exception.InstructorNotFoundException;
 import com.wecompany.duoprojectv1.mapper.InstructorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,13 @@ public class InstructorService {
         return instructorMapper.findLecturesByInstructor(accId);
     }
 
-    // service/InstructorService.java
-public List<EnrolledStudentDto> getMyStudents(int accId) {
-    return instructorMapper.findEnrolledStudentsByInstructor(accId);
+    public List<EnrolledStudentDto> getMyStudents(int accId) {
+        return instructorMapper.findEnrolledStudentsByInstructor(accId);
+    }
+
+    // Optional<Instructor>를 반환하도록 수정
+    public Optional<Instructor> findById(Integer insId) {
+    return instructorMapper.findById(insId);
 }
 
 }

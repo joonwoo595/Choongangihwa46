@@ -4,23 +4,22 @@ import com.wecompany.duoprojectv1.domain.Instructor;
 import com.wecompany.duoprojectv1.dto.EnrolledStudentDto;
 import com.wecompany.duoprojectv1.dto.InstructorLectureDto;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Param; // ⭕
-
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
 
 @Mapper
 public interface InstructorMapper {
+
     Optional<Instructor> findByAccId(@Param("accId") Integer accId);
 
-    @Select("SELECT * FROM instructor WHERE ins_id = #{insId}")
+    // ❌ 어노테이션 제거
     Optional<Instructor> findById(@Param("insId") Integer insId);
 
-    List<InstructorLectureDto> findLecturesByInstructor(@Param("accId") int accId);
+   List<InstructorLectureDto> findLecturesByInstructor(@Param("insId") int insId);  // ✅ 일치시켜야 함
 
-    List<EnrolledStudentDto> findEnrolledStudentsByInstructor(@Param("accId") int accId);
+
+    List<EnrolledStudentDto> findEnrolledStudentsByInstructor(@Param("insId") int insId);
+
 }
-
-
