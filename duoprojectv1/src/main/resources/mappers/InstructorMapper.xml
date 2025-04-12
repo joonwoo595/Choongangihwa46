@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wecompany.duoprojectv1.mapper.InstructorMapper">
+
+    <select id="findLecturesByInstructor" resultType="com.wecompany.duoprojectv1.dto.InstructorLectureDto">
+        SELECT cos_id, cos_name, price, create_date
+        FROM lecture
+        WHERE ins_id = (
+            SELECT ins_id FROM instructor WHERE acc_id = #{accId}
+        )
+    </select>
+
+    <select id="findEnrolledStudentsByInstructor" resultType="com.wecompany.duoprojectv1.dto.EnrolledStudentDto">
+        SELECT s.st_num, s.st_name, s.st_department, s.st_year, l.cos_name
+        FROM enrollment e
+        JOIN student s ON e.st_num = s.st_num
+        JOIN lecture l ON e.cos_id = l.cos_id
+        WHERE l.ins_id = (
+            SELECT ins_id FROM instructor WHERE acc_id = #{accId}
+        )
+    </select>
+
+</mapper>

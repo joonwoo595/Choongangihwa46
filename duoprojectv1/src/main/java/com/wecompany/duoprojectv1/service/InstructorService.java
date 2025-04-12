@@ -1,5 +1,6 @@
 package com.wecompany.duoprojectv1.service;
 
+import com.wecompany.duoprojectv1.dto.EnrolledStudentDto;
 import com.wecompany.duoprojectv1.dto.InstructorLectureDto;
 import com.wecompany.duoprojectv1.mapper.InstructorMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,4 +16,10 @@ public class InstructorService {
     public List<InstructorLectureDto> getMyLectures(int accId) {
         return instructorMapper.findLecturesByInstructor(accId);
     }
+
+    // service/InstructorService.java
+public List<EnrolledStudentDto> getMyStudents(int accId) {
+    return instructorMapper.findEnrolledStudentsByInstructor(accId);
+}
+
 }

@@ -1,5 +1,6 @@
 package com.wecompany.duoprojectv1.controller;
 
+import com.wecompany.duoprojectv1.dto.EnrolledStudentDto;
 import com.wecompany.duoprojectv1.dto.InstructorLectureDto;
 import com.wecompany.duoprojectv1.service.InstructorService;
 import lombok.RequiredArgsConstructor;
@@ -19,4 +20,11 @@ public class InstructorController {
     public ResponseEntity<List<InstructorLectureDto>> getMyLectures(@RequestParam int accId) {
         return ResponseEntity.ok(instructorService.getMyLectures(accId));
     }
+
+    // controller/InstructorController.java
+@GetMapping("/students")
+public ResponseEntity<List<EnrolledStudentDto>> getMyStudents(@RequestParam int accId) {
+    return ResponseEntity.ok(instructorService.getMyStudents(accId));
+}
+
 }
