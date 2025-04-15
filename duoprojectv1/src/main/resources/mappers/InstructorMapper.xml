@@ -28,4 +28,14 @@
     SELECT * FROM instructor WHERE ins_id = #{insId}
 </select>
 
+    <!-- resources/mappers/InstructorMapper.xml -->
+
+
+    <select id="findByAccId" resultType="com.wecompany.duoprojectv1.domain.Instructor">
+        SELECT * FROM instructor WHERE acc_id = #{accId}
+    </select>
+
+
+
+
 </mapper>

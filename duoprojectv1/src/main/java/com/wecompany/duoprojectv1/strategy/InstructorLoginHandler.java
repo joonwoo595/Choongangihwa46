@@ -23,8 +23,9 @@ public class InstructorLoginHandler implements LoginHandlerStrategy {
         dto.setName(instructor.getInsName());
         dto.setDepartmentId(instructor.getDepId());
         dto.setMajorId(instructor.getMajId());
-        dto.setType("INSTRUCTOR");
+        dto.setType("INSTRUCTOR"); // ✅ 제거해도 됨 (getType()으로 자동 처리됨)
         return dto;
     }
 }
+
 

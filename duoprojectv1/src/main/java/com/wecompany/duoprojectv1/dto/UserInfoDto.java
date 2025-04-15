@@ -14,5 +14,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = InstructorDto.class, name = "INSTRUCTOR")
 })
 public interface UserInfoDto {
-    void setType(String type);
+    String getType();
+
+    void setType(String type); // ✅ 추가
 }
+
